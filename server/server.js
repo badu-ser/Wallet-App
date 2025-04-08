@@ -6,14 +6,14 @@ import process from 'node:process';
 import colors from 'colors';
 import usersRouter from './routers/users.router.js';
 import transactionsRouter from './routers/transactions.router.js';
+import adminRouter from './routers/admin.routes.js';
 import 'dotenv/config';
 import './config/passport.config.js';
 import swaggerOutput from './swagger-output.js';
 import swaggerUi from 'swagger-ui-express';
-import adminRouter from './routers/admin.routes.js';
-app.use('/admin', adminRouter);
 
-const app = express();
+const app = express(); // Moved this up here!
+
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 app.use(morgan(formatsLogger));
@@ -22,8 +22,10 @@ app.use(express.json());
 
 app.use(express.static('public'));
 app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
+
 app.use('/users', usersRouter);
 app.use('/transactions', transactionsRouter);
+app.use('/admin', adminRouter); // Now it's safe here!
 
 app.use((_, res, __) => {
   res.status(404).json({
