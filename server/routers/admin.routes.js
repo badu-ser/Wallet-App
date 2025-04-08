@@ -1,8 +1,8 @@
 // routes/admin.routes.js
 
 import { Router } from 'express';
-import User from '../models/User.js';
-import Transaction from '../models/Transaction.js';
+import User from '../server/service/schema/user.schema.js';
+import Transaction from '../server/service/schema/transaction.schema.js';
 
 const adminRouter = Router();
 
