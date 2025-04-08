@@ -7,8 +7,6 @@ import PublicRoute from './components/PublicRoute';
 import PrivateRoute from './components/PrivateRoute';
 import Loader from './components/Loader/Loader.jsx';
 import './App.css';
-import adminRouter from './routers/admin.routes.js';
-app.use('/admin', adminRouter);
 import SharedLayout from './components/SharedLayout/SharedLayout.jsx';
 import HomeTab from './components/HomeTab/HomeTab.jsx';
 import CurrencyTable from './components/CurrencyTable/CurrencyTable.jsx';
