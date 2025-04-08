@@ -10,6 +10,8 @@ import 'dotenv/config';
 import './config/passport.config.js';
 import swaggerOutput from './swagger-output.js';
 import swaggerUi from 'swagger-ui-express';
+import adminRouter from './routers/admin.routes.js';
+app.use('/admin', adminRouter);
 
 const app = express();
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
