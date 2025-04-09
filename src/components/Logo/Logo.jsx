@@ -39,7 +39,7 @@ const Logo = () => {
           fill="#4A56E2"
         />
       </SvgIcon>
-      <h2 className={css.logo}>Wallet</h2>
+      <h2 className={css.logo}>X4 Wallet</h2>
     </div>
   );
 };
