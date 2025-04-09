@@ -32,7 +32,7 @@ const Balance = () => {
         Your Balance
       </Box>
       <Box key="balance.box2" className={css.balanceBox}>
-        PLN<span className={css.balanceSum}>{formatMoney(balance)}</span>
+        ₹ <span className={css.balanceSum}>{formatMoney(balance)}</span>
       </Box>
     </div>
   );
