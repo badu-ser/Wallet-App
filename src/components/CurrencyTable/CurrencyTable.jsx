@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Paper,
   TextField,
@@ -9,14 +9,16 @@ import {
 import '../../stylesheet/vars.css';
 import css from './CurrencyTable.module.css';
 
-const PayoutForm = () => {
+const PayoutForm = ({ balance }) => {
   const [formData, setFormData] = useState({
     amount: '',
     upiId: ''
   });
+
   const [errors, setErrors] = useState({
     amount: false,
-    upiId: false
+    upiId: false,
+    balance: false
   });
 
   const handleChange = (e) => {
@@ -28,22 +30,30 @@ const PayoutForm = () => {
   };
 
   const validateUPI = (upi) => {
-    // Basic UPI validation regex
     const upiRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+$/;
     const upiNumberRegex = /^\d+@[a-zA-Z0-9]+$/;
     return upiRegex.test(upi) || upiNumberRegex.test(upi);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    let valid = true;
+
     const newErrors = {
       amount: false,
-      upiId: false
+      upiId: false,
+      balance: false
     };
 
-    if (parseFloat(formData.amount) < 10) {
+    const amount = parseFloat(formData.amount);
+    let valid = true;
+
+    if (amount < 10) {
       newErrors.amount = true;
+      valid = false;
+    }
+
+    if (amount > balance) {
+      newErrors.balance = true;
       valid = false;
     }
 
@@ -54,10 +64,25 @@ const PayoutForm = () => {
 
     setErrors(newErrors);
 
-    if (valid) {
-      // Submit the form
-      console.log('Form submitted:', formData);
-      alert('Payout request submitted successfully!');
+    if (!valid) return;
+
+    try {
+      const res = await fetch('/api/payouts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      if (res.ok) {
+        alert('Payout request submitted successfully!');
+        setFormData({ amount: '', upiId: '' });
+      } else {
+        const err = await res.json();
+        alert('Error: ' + (err.message || 'Submission failed.'));
+      }
+    } catch (err) {
+      console.error('Error submitting payout request:', err);
+      alert('Something went wrong. Try again later.');
     }
   };
 
@@ -68,34 +93,33 @@ const PayoutForm = () => {
         onSubmit={handleSubmit}
         sx={{
           width: [280, 336, 393],
-          height: '174px',
           borderRadius: '30px',
           overflow: 'hidden',
           marginTop: '20px',
           padding: '20px',
           backgroundColor: '#4a56e2',
           backgroundImage: 'url(icons/currencyTable.svg)',
-          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: '100% 100%',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
           '@media screen and (max-width: 1279px)': {
-            height: '182px',
+            height: 'auto',
           },
           '@media screen and (min-width: 1280px)': {
-            height: '300px',
             padding: '30px',
           },
         }}
       >
-        <Typography 
-          variant="h6" 
+        <Typography
+          variant="h6"
           sx={{
             color: '#FFFFFF',
             fontWeight: '700',
             fontSize: '18px',
             fontFamily: 'var(--font-secondary)',
-            marginBottom: '10px'
+            marginBottom: '15px'
           }}
         >
           Request Payout
@@ -108,8 +132,14 @@ const PayoutForm = () => {
           type="number"
           value={formData.amount}
           onChange={handleChange}
-          error={errors.amount}
-          helperText={errors.amount ? "Minimum amount is 10 Rs" : ""}
+          error={errors.amount || errors.balance}
+          helperText={
+            errors.amount
+              ? 'Minimum amount is 10 Rs'
+              : errors.balance
+              ? 'Amount exceeds available balance'
+              : ''
+          }
           InputProps={{
             startAdornment: <InputAdornment position="start">Rs</InputAdornment>,
           }}
@@ -130,8 +160,9 @@ const PayoutForm = () => {
           value={formData.upiId}
           onChange={handleChange}
           error={errors.upiId}
-          helperText={errors.upiId ? "Enter a valid UPI ID" : ""}
+          helperText={errors.upiId ? 'Enter a valid UPI ID' : ''}
           sx={{
+            marginBottom: '15px',
             '& .MuiOutlinedInput-root': {
               backgroundColor: 'white',
               borderRadius: '10px',
@@ -144,7 +175,6 @@ const PayoutForm = () => {
           type="submit"
           variant="contained"
           sx={{
-            marginTop: '15px',
             backgroundColor: 'var(--color-category-childcare)',
             color: '#FFFFFF',
             fontFamily: 'var(--font-secondary)',
