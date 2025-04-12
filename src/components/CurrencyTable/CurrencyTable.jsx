@@ -41,16 +41,28 @@ const PayoutForm = ({ balance }) => {
     e.preventDefault();
 
     const newErrors = {
-      amount: false,
-      upiId: false,
-      balance: false
-    };
+  amount: false,
+  upiId: false,
+  balance: false
+};
 
-    const amount = parseFloat(formData.amount);
+let valid = true;
+
+const amount = parseFloat(formData.amount);
 const availableBalance = Number(balance);
+
+if (isNaN(amount) || amount < 10) {
+  newErrors.amount = true;
+  valid = false;
+}
 
 if (amount > availableBalance) {
   newErrors.balance = true;
+  valid = false;
+}
+
+if (!validateUPI(formData.upiId)) {
+  newErrors.upiId = true;
   valid = false;
 }
 
