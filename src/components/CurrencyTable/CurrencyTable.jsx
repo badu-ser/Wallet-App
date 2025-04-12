@@ -47,7 +47,12 @@ const PayoutForm = ({ balance }) => {
     };
 
     const amount = parseFloat(formData.amount);
-    let valid = true;
+const availableBalance = Number(balance);
+
+if (amount > availableBalance) {
+  newErrors.balance = true;
+  valid = false;
+}
 
     if (amount < 10) {
       newErrors.amount = true;
