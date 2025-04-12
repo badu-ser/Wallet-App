@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import Media from 'react-media';
 import { mediaQueries } from '../../utils/constants';
 import css from './Navigation.module.css';
-import CurrencyIcon from '../../images/svg/currency.svg?react'; // Fixed path
+import CurrencyIcon from '../../assets/icons/currency.svg?react'; // Fixed path
 
 const Navigation = () => {
   const { mobile } = mediaQueries;
