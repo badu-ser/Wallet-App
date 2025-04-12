@@ -16,10 +16,7 @@ const config = {
   },
 };
 
-const baseUrl =
-  process.env.NODE_ENV === 'development'
-    ? `http://localhost:5173/#/users/verify/`
-    : `${process.env.FRONTEND_DEPLOY_URL}/#/users/verify/`;
+const baseUrl = `${process.env.FRONTEND_DEPLOY_URL}/#/users/verify/`;
 
 const send = async ({ to, firstName, verificationToken }) => {
   const capitalizedFirstName = capitalizeEachWord(firstName);
