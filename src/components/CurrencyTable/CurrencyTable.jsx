@@ -72,7 +72,7 @@ const PayoutForm = () => {
     let valid = true;
     const amount = parseFloat(formData.amount);
 
-    if (isNaN(amount) {
+    if (isNaN(amount)) {
       newErrors.amount = true;
       valid = false;
     } else if (amount < 10) {
