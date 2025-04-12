@@ -68,13 +68,14 @@ const Navigation = () => {
             <span className={css.span}>Statistics</span>
           </NavLink>
         </li>
-<li>
+<li className={css.listItem}>
   <Media queries={{ small: mobile }}>
     {matches =>
       matches.small ? (
         <NavLink className={css.link} to="currency">
           <CurrencyIcon
             className={css.icon}
+            color="inherit"
             sx={{
               width: '44px',
               height: '44px',
@@ -87,6 +88,7 @@ const Navigation = () => {
               },
             }}
           />
+          <span className={css.span}>Currency</span>
         </NavLink>
       ) : null
     }
