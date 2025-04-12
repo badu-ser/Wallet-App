@@ -67,11 +67,13 @@ const PayoutForm = ({ balance }) => {
     if (!valid) return;
 
     try {
-      const res = await fetch('/api/payouts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
+      const res = await fetch('/api/SaveTournamentData', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(formData),
+});
 
       if (res.ok) {
         alert('Payout request submitted successfully!');
