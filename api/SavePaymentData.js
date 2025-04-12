@@ -32,7 +32,6 @@ export default async function handler(req, res) {
       {
         amount,
         upiId,
-        status: 'Pending',
         timestamp: new Date().toISOString()
       }
     ];
@@ -51,7 +50,10 @@ export default async function handler(req, res) {
       throw new Error('Failed to save data');
     }
 
-    return res.status(200).json({ success: true, message: 'Payout request saved successfully!' });
+    return res.status(200).json({
+      success: true,
+      message: 'Payout request saved successfully!'
+    });
 
   } catch (error) {
     console.error('Error:', error);
@@ -61,4 +63,4 @@ export default async function handler(req, res) {
       error: error.message
     });
   }
-        }
+}
