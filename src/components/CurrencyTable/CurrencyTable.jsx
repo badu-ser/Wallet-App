@@ -21,6 +21,8 @@ const PayoutForm = ({ balance }) => {
     balance: false
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -66,14 +68,15 @@ const PayoutForm = ({ balance }) => {
 
     if (!valid) return;
 
+    setLoading(true);
     try {
       const res = await fetch('https://x4-esports-official.vercel.app/api/SavePaymentData', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(formData),
-});
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
       if (res.ok) {
         alert('Payout request submitted successfully!');
@@ -85,6 +88,8 @@ const PayoutForm = ({ balance }) => {
     } catch (err) {
       console.error('Error submitting payout request:', err);
       alert('Something went wrong. Try again later.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -176,6 +181,7 @@ const PayoutForm = ({ balance }) => {
         <Button
           type="submit"
           variant="contained"
+          disabled={loading}
           sx={{
             backgroundColor: 'var(--color-category-childcare)',
             color: '#FFFFFF',
@@ -187,7 +193,7 @@ const PayoutForm = ({ balance }) => {
           }}
           fullWidth
         >
-          Request Payout
+          {loading ? 'Processing...' : 'Request Payout'}
         </Button>
       </Paper>
     </div>
