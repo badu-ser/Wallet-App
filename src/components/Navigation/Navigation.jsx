@@ -96,6 +96,7 @@ const Navigation = () => {
                       fill=""
                     />
                   </SvgIcon>
+                    <span className={css.span}>WITHDRAW</span>
                 </NavLink>
               ) : null
             }
