@@ -11,8 +11,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const binId = '67e29bd18960c979a577fdbc';
-    const apiKey = '$2a$10$nDTGN6HF3fw9qohE1k/uV.KC6T8t4HJUxt4aOmLkN/m7ksJ9HSGvG';
+    const binId = '67fa64a08960c979a58396de';
+    const apiKey = '$2a$10$jB57pOyAbeCEdv6ovXThfO3MVUw88TvzC9EsUj6.XsZyRIewLpiUS';
 
     // Fetch existing payout data
     const getResponse = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
