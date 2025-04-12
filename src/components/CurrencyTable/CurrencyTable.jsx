@@ -67,7 +67,7 @@ const PayoutForm = ({ balance }) => {
     if (!valid) return;
 
     try {
-      const res = await fetch('/api/SavePaymentData', {
+      const res = await fetch('https://x4-esports-official.vercel.app/api/SavePaymentData', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
