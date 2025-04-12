@@ -67,7 +67,7 @@ const PayoutForm = ({ balance }) => {
     if (!valid) return;
 
     try {
-      const res = await fetch('/api/SaveTournamentData', {
+      const res = await fetch('/api/SavePaymentData', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
