@@ -33,7 +33,6 @@ const PayoutForm = () => {
   const [loading, setLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
 
-  // Replicate balance calculation from Balance.jsx
   useEffect(() => {
     const incomesSum = transactions
       .filter(t => t.type === 'Income')
@@ -47,7 +46,6 @@ const PayoutForm = () => {
     setBalance(newBalance);
   }, [transactions]);
 
-  // Rest of the component remains the same
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -74,7 +72,10 @@ const PayoutForm = () => {
     let valid = true;
     const amount = parseFloat(formData.amount);
 
-    if (isNaN(amount) || amount < 10) {
+    if (isNaN(amount) {
+      newErrors.amount = true;
+      valid = false;
+    } else if (amount < 10) {
       newErrors.amount = true;
       valid = false;
     }
@@ -96,10 +97,9 @@ const PayoutForm = () => {
     }
   };
 
-  // Rest of the component (handleConfirm, return JSX) remains identical
-  // to previous version except removing the balance prop
-  // ...
-  
+  const handleConfirm = async () => {
+    setOpenDialog(false);
+    setLoading(true);
     
     try {
       const res = await fetch('https://x4-esports-official.vercel.app/api/SavePaymentData', {
@@ -115,7 +115,6 @@ const PayoutForm = () => {
 
       if (res.ok) {
         alert('Payout request submitted successfully!');
-        // Reset form and errors
         setFormData({ amount: '', upiId: '' });
         setErrors({ amount: false, upiId: false, balance: false });
       } else {
