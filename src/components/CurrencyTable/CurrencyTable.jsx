@@ -4,7 +4,13 @@ import {
   TextField,
   Button,
   Typography,
-  InputAdornment
+  InputAdornment,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  CircularProgress
 } from '@mui/material';
 import '../../stylesheet/vars.css';
 import css from './CurrencyTable.module.css';
@@ -22,6 +28,7 @@ const PayoutForm = ({ balance }) => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,67 +44,62 @@ const PayoutForm = ({ balance }) => {
     return upiRegex.test(upi) || upiNumberRegex.test(upi);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     const newErrors = {
-  amount: false,
-  upiId: false,
-  balance: false
-};
+      amount: false,
+      upiId: false,
+      balance: false
+    };
 
-let valid = true;
+    let valid = true;
+    const amount = parseFloat(formData.amount);
+    const availableBalance = parseFloat(balance);
 
-const amount = parseFloat(formData.amount);
-const availableBalance = Number(balance);
-
-if (isNaN(amount) || amount < 10) {
-  newErrors.amount = true;
-  valid = false;
-}
-
-if (amount > availableBalance) {
-  newErrors.balance = true;
-  valid = false;
-}
-
-if (!validateUPI(formData.upiId)) {
-  newErrors.upiId = true;
-  valid = false;
-}
-
-    if (amount < 10) {
+    if (isNaN(amount) || amount < 10) {
       newErrors.amount = true;
       valid = false;
     }
 
-    if (amount > balance) {
+    if (amount > availableBalance) {
       newErrors.balance = true;
       valid = false;
     }
 
-    if (!validateUPI(formData.upiId)) {
+    if (!formData.upiId || !validateUPI(formData.upiId)) {
       newErrors.upiId = true;
       valid = false;
     }
 
     setErrors(newErrors);
 
-    if (!valid) return;
+    if (valid) {
+      setOpenDialog(true);
+    }
+  };
 
+  const handleConfirm = async () => {
+    setOpenDialog(false);
     setLoading(true);
+    
     try {
       const res = await fetch('https://x4-esports-official.vercel.app/api/SavePaymentData', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          amount: parseFloat(formData.amount),
+          upiId: formData.upiId
+        }),
       });
 
       if (res.ok) {
         alert('Payout request submitted successfully!');
+        // Reset form and errors
         setFormData({ amount: '', upiId: '' });
+        setErrors({ amount: false, upiId: false, balance: false });
       } else {
         const err = await res.json();
         alert('Error: ' + (err.message || 'Submission failed.'));
@@ -166,6 +168,7 @@ if (!validateUPI(formData.upiId)) {
           }
           InputProps={{
             startAdornment: <InputAdornment position="start">Rs</InputAdornment>,
+            inputProps: { min: 0, step: 0.01 }
           }}
           sx={{
             marginBottom: '15px',
@@ -184,7 +187,7 @@ if (!validateUPI(formData.upiId)) {
           value={formData.upiId}
           onChange={handleChange}
           error={errors.upiId}
-          helperText={errors.upiId ? 'Enter a valid UPI ID' : ''}
+          helperText={errors.upiId ? 'Enter a valid UPI ID (e.g., name@upi or 1234567890@upi)' : ''}
           sx={{
             marginBottom: '15px',
             '& .MuiOutlinedInput-root': {
@@ -199,6 +202,7 @@ if (!validateUPI(formData.upiId)) {
           type="submit"
           variant="contained"
           disabled={loading}
+          startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
           sx={{
             backgroundColor: 'var(--color-category-childcare)',
             color: '#FFFFFF',
@@ -212,6 +216,28 @@ if (!validateUPI(formData.upiId)) {
         >
           {loading ? 'Processing...' : 'Request Payout'}
         </Button>
+
+        <Dialog
+          open={openDialog}
+          onClose={() => setOpenDialog(false)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            Confirm Payout Request
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you want to request a payout of Rs{formData.amount} to {formData.upiId}?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
+            <Button onClick={handleConfirm} autoFocus color="primary">
+              Confirm
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Paper>
     </div>
   );
