@@ -55,6 +55,7 @@ const App = () => {
           <Route path="*" element={<PublicRoute component={<NotFound />} />} />
         </Route>
       </Routes>
+      <BrevoWidget/>
     </Suspense>
   );
 };
