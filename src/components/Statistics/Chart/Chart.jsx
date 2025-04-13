@@ -85,7 +85,7 @@ const Chart = ({ categoriesSums, balance }) => {
         <Loader />
       ) : actualLabels.length > 0 ? (
         <div className={css.chartWrapper}>
-          <p className={css.balance}>PLN {formatMoney(balance)}</p>
+          <p className={css.balance}>Bal: ₹ {formatMoney(balance)}</p>
           <Doughnut
             data={data}
             options={options}
