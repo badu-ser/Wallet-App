@@ -1,5 +1,3 @@
-import BrevoWidget from './brevo';
-export default App;
 import { lazy, Suspense, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -12,6 +10,7 @@ import './App.css';
 import SharedLayout from './components/SharedLayout/SharedLayout.jsx';
 import HomeTab from './components/HomeTab/HomeTab.jsx';
 import CurrencyTable from './components/CurrencyTable/CurrencyTable.jsx';
+import BrevoWidget from './brevo';  // Import Brevo widget
 
 const Login = lazy(() => import('./pages/LoginPage/LoginPage.jsx'));
 const Register = lazy(() => import('./pages/RegisterPage/RegisterPage.jsx'));
@@ -55,9 +54,9 @@ const App = () => {
           <Route path="*" element={<PublicRoute component={<NotFound />} />} />
         </Route>
       </Routes>
-      <BrevoWidget/>
+      <BrevoWidget />  
     </Suspense>
   );
 };
 
-export default App;
+export default App;  
