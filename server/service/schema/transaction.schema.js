@@ -43,8 +43,8 @@ const transaction = new Schema(
         'UPI Withdrawal',
         'Deposit',
         'Referral Income',
-        'Join Bonus'
-        'Income',
+        'Join Bonus',
+        'Income'
       ],
       required: [true, 'Category is required'],
     },
