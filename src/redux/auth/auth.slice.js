@@ -58,4 +58,5 @@ const authSlice = createSlice({
 });
 
 export const authReducer = authSlice.reducer;
-
+// Add this to your auth.slice.js file
+export const selectUserEmail = (state) => state.auth.user.email;
