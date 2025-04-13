@@ -15,7 +15,7 @@ const notifyUserEmailSenTFailure = message => {
 const notifyUserEmailVerifiedSuccess = firstName => {
   Notiflix.Report.success(
     `Hi, ${firstName}! Email is verified!`,
-    'Now You have an account in Wallet App.',
+    'Now You have an verified account in X4 Wallet.',
     'Have fun!',
   );
 };
