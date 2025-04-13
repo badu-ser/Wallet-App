@@ -49,14 +49,14 @@ const Statistics = () => {
   });
   
 const [categoriesSums, setCategoriesSums] = useState([
-  { color: 'linear-gradient(to right, #FFB3B3, #FF6666)', name: 'Main expenses', sum: 0 },
-  { color: 'linear-gradient(to right, #66BB6A, #A8E6CF)', name: 'TR Winnings', sum: 0 }, // green gradient for TR Winnings
-  { color: 'linear-gradient(to right, #FF7F7F, #FF4C4C)', name: 'TR Withdrawal', sum: 0 },
-  { color: 'linear-gradient(to right, #FF7F7F, #FF4C4C)', name: 'UPI Withdrawal', sum: 0 }, // coral gradient
-  { color: 'linear-gradient(to right, #A8E6CF, #66BB6A)', name: 'Deposit', sum: 0 },
-  { color: 'linear-gradient(to right, #81C784, #66BB6A)', name: 'Referral Income', sum: 0 },
-  { color: 'linear-gradient(to right, #B2FF59, #66BB6A)', name: 'Join Bonus', sum: 0 },
-  { color: 'linear-gradient(to right, #66BB6A, #A8E6CF)', name: 'Income', sum: 0 }, // gradient for Income (mix of green)
+{ color: '#F50505', name: 'Main expenses', sum: 0 },
+{ color: '#0DFF00', name: 'TR Winnings', sum: 0 },
+{ color: '#DB1616', name: 'TR Withdrawal', sum: 0 },
+{ color: '#FF4747', name: 'UPI Withdrawal', sum: 0 },
+{ color: '#7CF280', name: 'Deposit', sum: 0 },
+{ color: '#3A9C3D', name: 'Referral Income', sum: 0 },
+{ color: '#038534', name: 'Join Bonus', sum: 0 },
+{ color: '#10730A', name: 'Income', sum: 0 },
 ]);
   
 
