@@ -47,19 +47,18 @@ const Statistics = () => {
     ],
     years: [],
   });
-
-  const [categoriesSums, setCategoriesSums] = useState([
-    { color: '#FED057', name: 'Main expenses', sum: 0 },
-    { color: '#FFD8D0', name: `Products`, sum: 0 },
-    { color: '#FD9498', name: `Car`, sum: 0 },
-    { color: '#C5BAFF', name: 'Self care', sum: 0 },
-    { color: '#6E78E8', name: 'Child care', sum: 0 },
-    { color: '#4A56E2', name: 'Household products', sum: 0 },
-    { color: '#81E1FF', name: `Education`, sum: 0 },
-    { color: '#24CCA7', name: `Leisure`, sum: 0 },
-    { color: '#00AD84', name: 'Entertainment', sum: 0 },
-    { color: '#008263', name: 'Other expenses', sum: 0 },
-  ]);
+  
+const [categoriesSums, setCategoriesSums] = useState([
+  { color: '#FED057', name: 'Main expenses', sum: 0 },
+  { color: '#FFD8D0', name: 'TR Winnings', sum: 0 },
+  { color: '#FD9498', name: 'TR Withdrawal', sum: 0 },
+  { color: '#C5BAFF', name: 'UPI Withdrawal', sum: 0 },
+  { color: '#6E78E8', name: 'Deposit', sum: 0 },
+  { color: '#4A56E2', name: 'Referral Income', sum: 0 },
+  { color: '#81E1FF', name: 'Join Bonus', sum: 0 },
+  { color: '#24CCA7', name: 'Income', sum: 0 },
+]);
+  
 
   const [incomesSum, setIncomesSum] = useState(0);
   const [expensesSum, setExpensesSum] = useState(0);
