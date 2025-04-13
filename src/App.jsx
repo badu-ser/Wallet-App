@@ -1,3 +1,5 @@
+import BrevoWidget from './BrevoWidget';
+export default App;
 import { lazy, Suspense, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
