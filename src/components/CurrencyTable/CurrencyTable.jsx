@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { selectTransactions } from '../../redux/selectors';
+import { selectUserEmail } from '../../redux/auth/auth.slice'; // Add this import
 import css from './CurrencyTable.module.css';
 
 const PayoutForm = () => {
@@ -30,6 +31,7 @@ const PayoutForm = () => {
 
   const [balance, setBalance] = useState(0);
   const transactions = useSelector(selectTransactions);
+  const userEmail = useSelector(selectUserEmail); // Access the user's email from Redux
   const [loading, setLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -109,7 +111,8 @@ const PayoutForm = () => {
         },
         body: JSON.stringify({
           amount: parseFloat(formData.amount),
-          upiId: formData.upiId
+          upiId: formData.upiId,
+          email: userEmail, // Forward the user's email here
         }),
       });
 
