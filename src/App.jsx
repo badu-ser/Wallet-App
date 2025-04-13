@@ -1,4 +1,4 @@
-import BrevoWidget from './BrevoWidget';
+import BrevoWidget from './brevo';
 export default App;
 import { lazy, Suspense, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
