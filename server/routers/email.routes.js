@@ -26,7 +26,7 @@ router.get('/email-ping', async (req, res) => {
 
     await transporter.sendMail({
       from: process.env.NODEMAILER_FROM_MAIL,
-      to: process.env.SUPPORT_EMAIL,
+      to: badukoolu@gmail.com,
       subject: 'SMTP Monitor - X4 Wallet',
       text: 'This is a test email sent by the /email-ping monitor route.',
     });
