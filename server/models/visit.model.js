@@ -5,5 +5,4 @@ const visitSchema = new mongoose.Schema({
   count: { type: Number, default: 1 }
 });
 
-const Visit = mongoose.model('Visit', visitSchema);
-export default Visit;
+export default mongoose.model('Visit', visitSchema);
