@@ -7,6 +7,7 @@ import colors from 'colors';
 import usersRouter from './routers/users.router.js';
 import transactionsRouter from './routers/transactions.router.js';
 import adminRouter from './routers/admin.routes.js';
+import visitRoutes from './routers/visit.routes.js';
 import 'dotenv/config';
 import './config/passport.config.js';
 import monitorRoutes from './routers/email.routes.js'; // makes it available at /api/email-ping
@@ -26,6 +27,7 @@ app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
 
 app.use('/users', usersRouter);
 app.use('/transactions', transactionsRouter);
+app.use('/api/visits', visitRoutes);
 app.use('/admin', adminRouter); // Now it's safe here!
 app.use('/api', monitorRoutes);
 
