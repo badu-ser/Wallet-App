@@ -13,9 +13,12 @@
 
     <!-- Redirect to splash.html unless already there -->
     <script>
-      if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
-        window.location.replace("/splash.html");
-      }
+  const alreadySeenSplash = sessionStorage.getItem("splashShown");
+
+  if (!alreadySeenSplash && (window.location.pathname === "/" || window.location.pathname === "/index.html")) {
+    sessionStorage.setItem("splashShown", "true");
+    window.location.replace("/splash.html");
+  }
     </script>
   </head>
   <body>
