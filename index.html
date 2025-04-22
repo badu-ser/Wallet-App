@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -11,18 +10,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="node_modules/modern-normalize/modern-normalize.css">
     <title>X4 Wallet | Powered by X4 eSports India</title>
+
+    <!-- Early splash check: redirect before app loads -->
+    <script>
+      const alreadySeenSplash = sessionStorage.getItem("splashShown");
+      if (
+        !alreadySeenSplash &&
+        (window.location.pathname === "/" || window.location.pathname === "/index.html")
+      ) {
+        sessionStorage.setItem("splashShown", "true");
+        window.location.replace("/splash.html");
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    <script>
-  const alreadySeenSplash = sessionStorage.getItem("splashShown");
-
-  if (!alreadySeenSplash && (window.location.pathname === "/" || window.location.pathname === "/index.html")) {
-    sessionStorage.setItem("splashShown", "true");
-    window.location.replace("/splash.html");
-  }
-    </script>
   </body>
 </html>
-
