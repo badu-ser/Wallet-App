@@ -1,7 +1,7 @@
 {
   "name": "X4 Wallet App",
   "short_name": "X4 Wallet",
-  "start_url": ".",
+  "start_url": "/splash.html"
   "display": "standalone",
   "background_color": "#000000",
   "description": "X4 Wallet - Lets transfer X4 funds seamlessly!",
