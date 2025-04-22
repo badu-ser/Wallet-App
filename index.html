@@ -15,6 +15,14 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+  const alreadySeenSplash = sessionStorage.getItem("splashShown");
+
+  if (!alreadySeenSplash && (window.location.pathname === "/" || window.location.pathname === "/index.html")) {
+    sessionStorage.setItem("splashShown", "true");
+    window.location.replace("/splash.html");
+  }
+    </script>
   </body>
 </html>
 
