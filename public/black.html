@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X4 Wallet - Loading</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #0A3D62;
+            overflow: hidden;
+        }
+
+        .splash-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .splash-logo {
+            width: 20vmin;
+            height: 20vmin;
+            animation: scalePulse 1.5s ease-in-out infinite;
+            margin-bottom: 2rem;
+        }
+
+        .app-name {
+            font-family: 'Arial', sans-serif;
+            font-size: 6vmin;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            animation: textGlow 2s ease-in-out infinite;
+        }
+
+        .loading-dots {
+            margin-top: 2rem;
+            font-size: 4vmin;
+            color: white;
+        }
+
+        @keyframes scalePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes textGlow {
+            0% { opacity: 0.9; }
+            50% { opacity: 1; text-shadow: 0 2px 8px rgba(255,255,255,0.4); }
+            100% { opacity: 0.9; }
+        }
+
+        @media (max-width: 600px) {
+            .splash-logo {
+                width: 30vmin;
+                height: 30vmin;
+            }
+            .app-name {
+                font-size: 8vmin;
+            }
+        }
+    </style>
+<style type="text/css" id="dcoder_stylesheet">body {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}</style></head>
+<body>
+    <div class="splash-container">
+        <img class="splash-logo" src="icons/android-chrome-192x192.png" alt="X4 Wallet Logo">
+        <div class="app-name">X4 Wallet</div>
+        <div class="loading-dots">•••</div>
+    </div>
+
+    <script>
+        // Smooth transition before redirect
+        function redirect() {
+            document.querySelector('.splash-container').style.opacity = '0';
+            setTimeout(() => window.location.href = '/', 500);
+        }
+
+        // Start redirect after 2.5 seconds (1.5s animation + 1s display)
+        setTimeout(redirect, 3500);
+
+        // Add dynamic loading dots animation
+        const dots = document.querySelector('.loading-dots');
+        let count = 0;
+        setInterval(() => {
+            count = (count + 1) % 4;
+            dots.textContent = '•'.repeat(count) + '◦'.repeat(3 - count);
+        }, 500);
+    </script>
+
+</body></html>
