@@ -1,11 +1,12 @@
 {
-  "name": "X4 Wallet App",
+  "name": "X4 Wallet",
   "short_name": "X4 Wallet",
   "start_url": "/splash.html",
   "display": "standalone",
   "background_color": "#000000",
   "description": "X4 Wallet - Lets transfer X4 funds seamlessly!",
   "icons": [
-    { "src": "icons/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" }
+    { "src": "icons/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
