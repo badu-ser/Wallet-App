@@ -225,17 +225,17 @@ const LoginForm = () => {
         
         {/* Forgot Password link */}
         <div style={{ marginTop: '10px' }} className={css.forgotPassword}>
-  <a 
-    href="#"
+  <span
     onClick={() => navigate('/forgot-password')}
     style={{
       color: 'blue',
       textDecoration: 'underline',
-      fontSize: '14px'
+      fontSize: '14px',
+      cursor: 'pointer',
     }}
   >
     Forgot Password?
-  </a>
+  </span>
 </div>
       </form>
     </>
