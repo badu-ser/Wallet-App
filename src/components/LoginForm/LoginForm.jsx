@@ -224,15 +224,19 @@ const LoginForm = () => {
         </div>
         
         {/* Forgot Password link */}
-        <div className={css.forgotPassword}>
-          <a 
-            href="#"
-            onClick={() => navigate('/forgot-password')} // Redirect to forgot password page
-            style={{ color: 'blue', textDecoration: 'underline', fontSize: '14px', marginTop: '10px' }}
-          >
-            Forgot Password?
-          </a>
-        </div>
+        <div style={{ marginTop: '10px' }} className={css.forgotPassword}>
+  <a 
+    href="#"
+    onClick={() => navigate('/forgot-password')}
+    style={{
+      color: 'blue',
+      textDecoration: 'underline',
+      fontSize: '14px'
+    }}
+  >
+    Forgot Password?
+  </a>
+</div>
       </form>
     </>
   );
