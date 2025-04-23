@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { TextField } from '@mui/material';
+import { TextField, IconButton, InputAdornment } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Logo from '../Logo/Logo.jsx';
 import CustomButton from '../CustomButton/CustomButton.jsx';
-import css from './LoginForm.module.css'; // Reuse styling from LoginForm
+import css from './LoginForm.module.css';
 import axios from 'axios';
 
 const ForgotPasswordForm = () => {
@@ -12,7 +14,10 @@ const ForgotPasswordForm = () => {
   const [emailChecked, setEmailChecked] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
   const handleContinue = async () => {
     try {
@@ -21,91 +26,65 @@ const ForgotPasswordForm = () => {
         setEmailChecked(true);
         setErrorMsg('');
       }
-    } catch (err) {
-      setErrorMsg('No user found');
+    } catch {
+      setErrorMsg('No user found with that email.');
     }
   };
 
   const handleChangePassword = async () => {
+    if (!newPassword || !confirmPassword) {
+      setErrorMsg('Please fill in both password fields.');
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
-      setErrorMsg('Passwords do not match');
+      setErrorMsg('Passwords do not match.');
       return;
     }
 
     try {
       const res = await axios.post('/api/auth/reset-password', {
         email,
-        otp: '0000', // optional, adjust as needed
+        otp: '0000',
         newPassword,
       });
 
       if (res.status === 200) {
-        alert('Password changed successfully');
-        // Optionally redirect or reset state
+        alert('Password changed successfully.');
+        // Optionally redirect or clear form
       }
-    } catch (err) {
+    } catch {
       setErrorMsg('Something went wrong. Try again.');
     }
   };
 
-  const inputSx = {
-    border: 'none',
-    borderColor: 'grey.400',
-    paddingTop: '0px',
-    paddingBottom: '0px',
-    marginTop: '20px',
-    marginBottom: '0px',
-    height: '80px',
-    fieldset: {
-      borderRadius: 0,
-      border: 'none',
-      borderBottom: 1,
-      width: '315px',
-    },
-    input: {
-      position: 'relative',
-      color: 'grey.600',
-      fontFamily: 'var(--font-primary)',
-      lineHeight: 1,
-      fontSize: '18px',
-      marginLeft: '45px',
-      marginTop: '0px',
-      marginBottom: '10px',
-      paddingLeft: '0px',
-      paddingTop: '8px',
-      paddingRight: '0px',
-      paddingBottom: '0px',
-      width: '270px',
-    },
-    label: {
-      color: 'grey.400',
-      fontFamily: 'var(--font-primary)',
-      lineHeight: 1,
-      fontSize: '18px',
-      marginLeft: '30px',
-    },
-    p: {
-      color: 'grey.400',
-      fontFamily: 'var(--font-primary)',
-      lineHeight: 1,
-      display: 'flex',
-      justifyContent: 'start',
-      alignItems: 'start',
-      paddingLeft: '0px',
-    },
-    legend: {
-      color: 'grey.400',
-      fontFamily: 'var(--font-primary)',
-      lineHeight: 1,
-      marginLeft: '30px',
-      marginTop: '0px',
-      marginBottom: '0px',
-      paddingLeft: '0px',
-      paddingTop: '0px',
-      paddingBottom: '0px',
-    },
-    span: { color: 'grey.400', fontFamily: 'var(--font-primary)', lineHeight: 1 },
-  };
+  const renderPasswordField = (label, value, setValue) => (
+    <div className={css.container_input}>
+      <TextField
+        type={showPassword ? 'text' : 'password'}
+        label={label}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        variant="outlined"
+        className={css.password}
+        sx={inputSx}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <LockIcon sx={{ fill: 'lightgray' }} />
+            </InputAdornment>
+          ),
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={togglePasswordVisibility} edge="end">
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
+    </div>
+  );
 
   return (
     <form className={css.form} onSubmit={(e) => e.preventDefault()}>
@@ -120,67 +99,24 @@ const ForgotPasswordForm = () => {
             type="email"
             label="E-mail"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             variant="outlined"
-            color="grey"
             className={css.email}
             sx={inputSx}
-          />
-          <EmailIcon
-            sx={{
-              position: 'absolute',
-              fill: 'lightgray',
-              top: '10px',
-              left: '10px',
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <EmailIcon sx={{ fill: 'lightgray' }} />
+                </InputAdornment>
+              ),
             }}
           />
         </div>
 
         {emailChecked && (
           <>
-            <div className={css.container_input}>
-              <TextField
-                name="newPassword"
-                type="password"
-                label="New Password"
-                value={newPassword}
-                onChange={e => setNewPassword(e.target.value)}
-                variant="outlined"
-                color="grey"
-                className={css.password}
-                sx={inputSx}
-              />
-              <LockIcon
-                sx={{
-                  position: 'absolute',
-                  fill: 'lightgray',
-                  top: '10px',
-                  left: '10px',
-                }}
-              />
-            </div>
-
-            <div className={css.container_input}>
-              <TextField
-                name="confirmPassword"
-                type="password"
-                label="Confirm Password"
-                value={confirmPassword}
-                onChange={e => setConfirmPassword(e.target.value)}
-                variant="outlined"
-                color="grey"
-                className={css.password}
-                sx={inputSx}
-              />
-              <LockIcon
-                sx={{
-                  position: 'absolute',
-                  fill: 'lightgray',
-                  top: '10px',
-                  left: '10px',
-                }}
-              />
-            </div>
+            {renderPasswordField('New Password', newPassword, setNewPassword)}
+            {renderPasswordField('Confirm Password', confirmPassword, setConfirmPassword)}
           </>
         )}
       </div>
@@ -197,6 +133,35 @@ const ForgotPasswordForm = () => {
       </div>
     </form>
   );
+};
+
+const inputSx = {
+  border: 'none',
+  borderColor: 'grey.400',
+  paddingTop: '0px',
+  paddingBottom: '0px',
+  marginTop: '20px',
+  height: '80px',
+  fieldset: {
+    borderRadius: 0,
+    border: 'none',
+    borderBottom: 1,
+    width: '315px',
+  },
+  input: {
+    color: 'grey.600',
+    fontFamily: 'var(--font-primary)',
+    fontSize: '18px',
+    paddingLeft: '0px',
+    paddingTop: '8px',
+    width: '270px',
+  },
+  label: {
+    color: 'grey.400',
+    fontFamily: 'var(--font-primary)',
+    fontSize: '18px',
+    marginLeft: '30px',
+  },
 };
 
 export default ForgotPasswordForm;
