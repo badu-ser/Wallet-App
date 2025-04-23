@@ -21,7 +21,7 @@ const ForgotPasswordForm = () => {
 
   const handleContinue = async () => {
     try {
-      const res = await axios.post('/api/auth/forgot-password', { email });
+      const res = await axios.post('https://loginx4.onrender.com/api/auth/forgot-password', { email });
       if (res.status === 200) {
         setEmailChecked(true);
         setErrorMsg('');
@@ -43,7 +43,7 @@ const ForgotPasswordForm = () => {
     }
 
     try {
-      const res = await axios.post('/api/auth/reset-password', {
+      const res = await axios.post('https://loginx4.onrender.com/api/auth/reset-password', {
         email,
         otp: '0000',
         newPassword,
