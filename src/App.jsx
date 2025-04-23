@@ -52,6 +52,7 @@ const App = () => {
           <Route exact path={`/login`} element={<PublicRoute component={<Login />} />} />
           <Route exact path={`/register`} element={<PublicRoute component={<Register />} />} />
           <Route path={`/users/verify/:verificationToken`} element={<PublicRoute component={<VerifyEmail />} />} />
+          <Route exact path={`/forgot-password`} element={<PublicRoute component={<ForgotPassword />} />} />
           <Route path="*" element={<PublicRoute component={<NotFound />} />} />
         </Route>
       </Routes>
