@@ -21,7 +21,7 @@ body {
 
 .container_input {
   position: relative;
-  background-color: #ffffff;
+  background-color: #e7eaf3;
 }
 
 .button_container {
@@ -32,7 +32,7 @@ body {
   margin: 0px;
   padding: 0px;
   gap: 20px;
-  background-color: #ffffff;
+  background-color: #e7eaf3;
 }
 
 .button {
