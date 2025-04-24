@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { TextField, IconButton, InputAdornment } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { TextField, IconButton, InputAdornment, Box } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 import Visibility from '@mui/icons-material/Visibility';
@@ -11,11 +11,29 @@ import axios from 'axios';
 
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState('');
-  const [emailChecked, setEmailChecked] = useState(false);
+  const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [emailChecked, setEmailChecked] = useState(false);
+  const [emailValid, setEmailValid] = useState(false);
+  const [passwordValid, setPasswordValid] = useState(false);
+  const [otpValid, setOtpValid] = useState(false);
+
+  // Real-time validation effects
+  useEffect(() => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setEmailValid(emailRegex.test(email));
+  }, [email]);
+
+  useEffect(() => {
+    setPasswordValid(newPassword.length >= 6 && newPassword === confirmPassword);
+  }, [newPassword, confirmPassword]);
+
+  useEffect(() => {
+    setOtpValid(otp.length === 4 && /^\d+$/.test(otp));
+  }, [otp]);
 
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
@@ -26,35 +44,30 @@ const ForgotPasswordForm = () => {
         setEmailChecked(true);
         setErrorMsg('');
       }
-    } catch {
-      setErrorMsg('No user found with that email.');
+    } catch (error) {
+      setErrorMsg(error.response?.data?.message || 'No user found with that email.');
     }
   };
 
   const handleChangePassword = async () => {
-    if (!newPassword || !confirmPassword) {
-      setErrorMsg('Please fill in both password fields.');
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      setErrorMsg('Passwords do not match.');
-      return;
-    }
-
     try {
       const res = await axios.post('https://loginx4.onrender.com/api/auth/reset-password', {
         email,
-        otp: '0000',
+        otp,
         newPassword,
       });
 
       if (res.status === 200) {
-        alert('Password changed successfully.');
-        // Optionally redirect or clear form
+        alert('Password changed successfully!');
+        // Reset form
+        setEmail('');
+        setOtp('');
+        setNewPassword('');
+        setConfirmPassword('');
+        setEmailChecked(false);
       }
-    } catch {
-      setErrorMsg('Something went wrong. Try again.');
+    } catch (error) {
+      setErrorMsg(error.response?.data?.message || 'Something went wrong. Please try again.');
     }
   };
 
@@ -66,8 +79,9 @@ const ForgotPasswordForm = () => {
         value={value}
         onChange={(e) => setValue(e.target.value)}
         variant="outlined"
-        className={css.password}
-        sx={inputSx}
+        fullWidth
+        error={!!confirmPassword && !passwordValid}
+        helperText={!!confirmPassword && !passwordValid && "Passwords must match and be at least 6 characters"}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -82,85 +96,106 @@ const ForgotPasswordForm = () => {
             </InputAdornment>
           ),
         }}
+        sx={inputSx}
       />
     </div>
   );
 
   return (
-    <form className={css.form} onSubmit={(e) => e.preventDefault()}>
-      <div className={css.logo_wrapper}>
-        <Logo />
-      </div>
-
-      <div className={css.container_field}>
-        <div className={css.container_input}>
-          <TextField
-            name="email"
-            type="email"
-            label="E-mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            variant="outlined"
-            className={css.email}
-            sx={inputSx}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <EmailIcon sx={{ fill: 'lightgray' }} />
-                </InputAdornment>
-              ),
-            }}
-          />
+    <Box sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100vh',
+      backgroundColor: '#f5f5f5',
+      padding: 2
+    }}>
+      <form className={css.form} onSubmit={(e) => e.preventDefault()}>
+        <div className={css.logo_wrapper}>
+          <Logo />
         </div>
 
-        {emailChecked && (
-          <>
-            {renderPasswordField('New Password', newPassword, setNewPassword)}
-            {renderPasswordField('Confirm Password', confirmPassword, setConfirmPassword)}
-          </>
-        )}
-      </div>
+        <div className={css.container_field}>
+          <div className={css.container_input}>
+            <TextField
+              name="email"
+              type="email"
+              label="E-mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              variant="outlined"
+              fullWidth
+              error={!!email && !emailValid}
+              helperText={!!email && !emailValid && "Please enter a valid email address"}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <EmailIcon sx={{ fill: 'lightgray' }} />
+                  </InputAdornment>
+                ),
+              }}
+              sx={inputSx}
+            />
+          </div>
 
-      {errorMsg && <p style={{ color: 'red', marginLeft: '20px' }}>{errorMsg}</p>}
+          {emailChecked && (
+            <>
+              <div className={css.container_input} style={{ marginTop: '20px' }}>
+                <TextField
+                  label="OTP"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  variant="outlined"
+                  fullWidth
+                  error={!!otp && !otpValid}
+                  helperText={!!otp && !otpValid && "Must be a 4-digit number"}
+                  inputProps={{ maxLength: 4 }}
+                  sx={inputSx}
+                />
+              </div>
+              {renderPasswordField('New Password', newPassword, setNewPassword)}
+              {renderPasswordField('Confirm Password', confirmPassword, setConfirmPassword)}
+            </>
+          )}
+        </div>
 
-      <div className={css.button_container}>
-        <CustomButton
-          type="button"
-          color="primary"
-          content={emailChecked ? 'Change Password' : 'Continue'}
-          onClick={emailChecked ? handleChangePassword : handleContinue}
-        />
-      </div>
-    </form>
+        {errorMsg && <p style={{ color: 'red', textAlign: 'center', margin: '10px 0' }}>{errorMsg}</p>}
+
+        <div className={css.button_container}>
+          <CustomButton
+            type="button"
+            color="primary"
+            content={emailChecked ? 'Change Password' : 'Continue'}
+            onClick={emailChecked ? handleChangePassword : handleContinue}
+            disabled={emailChecked ? !(passwordValid && otpValid) : !emailValid}
+            sx={{ width: '100%', mt: 2 }}
+          />
+        </div>
+      </form>
+    </Box>
   );
 };
 
 const inputSx = {
-  border: 'none',
-  borderColor: 'grey.400',
-  paddingTop: '0px',
-  paddingBottom: '0px',
   marginTop: '20px',
-  height: '80px',
-  fieldset: {
-    borderRadius: 0,
-    border: 'none',
-    borderBottom: 1,
-    width: '315px',
+  '& .MuiOutlinedInput-root': {
+    borderRadius: '8px',
+    '& fieldset': {
+      borderColor: 'grey.300',
+    },
+    '&:hover fieldset': {
+      borderColor: 'primary.main',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: 'primary.main',
+      borderWidth: 2,
+    },
   },
-  input: {
-    color: 'grey.600',
-    fontFamily: 'var(--font-primary)',
-    fontSize: '18px',
-    paddingLeft: '0px',
-    paddingTop: '8px',
-    width: '270px',
-  },
-  label: {
-    color: 'grey.400',
-    fontFamily: 'var(--font-primary)',
-    fontSize: '18px',
-    marginLeft: '30px',
+  '& .MuiInputLabel-root': {
+    color: 'grey.500',
+    '&.Mui-focused': {
+      color: 'primary.main',
+    },
   },
 };
 
