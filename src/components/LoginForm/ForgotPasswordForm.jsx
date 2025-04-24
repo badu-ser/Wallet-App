@@ -21,7 +21,6 @@ const ForgotPasswordForm = () => {
   const [passwordValid, setPasswordValid] = useState(false);
   const [otpValid, setOtpValid] = useState(false);
 
-  // Real-time validation effects
   useEffect(() => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     setEmailValid(emailRegex.test(email));
@@ -59,7 +58,6 @@ const ForgotPasswordForm = () => {
 
       if (res.status === 200) {
         alert('Password changed successfully!');
-        // Reset form
         setEmail('');
         setOtp('');
         setNewPassword('');
@@ -102,76 +100,95 @@ const ForgotPasswordForm = () => {
   );
 
   return (
-    <Box sx={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      minHeight: '100vh',
-      backgroundColor: '#fffff',
-      padding: 2
-    }}>
-      <form className={css.form} onSubmit={(e) => e.preventDefault()}>
-        <div className={css.logo_wrapper}>
-          <Logo />
-        </div>
+    <Box sx={{ position: 'relative', minHeight: '100vh' }}>
+      {/* Background layer */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          backgroundColor: '#ffffff',
+          zIndex: -1,
+        }}
+      />
 
-        <div className={css.container_field}>
-          <div className={css.container_input}>
-            <TextField
-              name="email"
-              type="email"
-              label="E-mail"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              variant="outlined"
-              fullWidth
-              error={!!email && !emailValid}
-              helperText={!!email && !emailValid && "Please enter a valid email address"}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <EmailIcon sx={{ fill: 'lightgray' }} />
-                  </InputAdornment>
-                ),
-              }}
-              sx={inputSx}
-            />
+      {/* Main content */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '100vh',
+          padding: 2,
+        }}
+      >
+        <form className={css.form} onSubmit={(e) => e.preventDefault()}>
+          <div className={css.logo_wrapper}>
+            <Logo />
           </div>
 
-          {emailChecked && (
-            <>
-              <div className={css.container_input} style={{ marginTop: '20px' }}>
-                <TextField
-                  label="OTP"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  variant="outlined"
-                  fullWidth
-                  error={!!otp && !otpValid}
-                  helperText={!!otp && !otpValid && "Must be a 4-digit number"}
-                  inputProps={{ maxLength: 4 }}
-                  sx={inputSx}
-                />
-              </div>
-              {renderPasswordField('New Password', newPassword, setNewPassword)}
-              {renderPasswordField('Confirm Password', confirmPassword, setConfirmPassword)}
-            </>
+          <div className={css.container_field}>
+            <div className={css.container_input}>
+              <TextField
+                name="email"
+                type="email"
+                label="E-mail"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                variant="outlined"
+                fullWidth
+                error={!!email && !emailValid}
+                helperText={!!email && !emailValid && "Please enter a valid email address"}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <EmailIcon sx={{ fill: 'lightgray' }} />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={inputSx}
+              />
+            </div>
+
+            {emailChecked && (
+              <>
+                <div className={css.container_input} style={{ marginTop: '20px' }}>
+                  <TextField
+                    label="OTP"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    variant="outlined"
+                    fullWidth
+                    error={!!otp && !otpValid}
+                    helperText={!!otp && !otpValid && "Must be a 4-digit number"}
+                    inputProps={{ maxLength: 4 }}
+                    sx={inputSx}
+                  />
+                </div>
+                {renderPasswordField('New Password', newPassword, setNewPassword)}
+                {renderPasswordField('Confirm Password', confirmPassword, setConfirmPassword)}
+              </>
+            )}
+          </div>
+
+          {errorMsg && (
+            <p style={{ color: 'red', textAlign: 'center', margin: '10px 0' }}>{errorMsg}</p>
           )}
-        </div>
 
-        {errorMsg && <p style={{ color: 'red', textAlign: 'center', margin: '10px 0' }}>{errorMsg}</p>}
-
-        <div className={css.button_container} style={{ marginTop: '15px' }}>
-          <CustomButton
-            type="button"
-            color="primary"
-            content={emailChecked ? 'Change Password' : 'Continue'}
-            onClick={emailChecked ? handleChangePassword : handleContinue}
-            disabled={emailChecked ? !(passwordValid && otpValid) : !emailValid}
-            sx={{ width: '100%', mt: 2 }}
-          />
-        </div>
-      </form>
+          <div className={css.button_container} style={{ marginTop: '25px' }}>
+            <CustomButton
+              type="button"
+              color="primary"
+              content={emailChecked ? 'Change Password' : 'Continue'}
+              onClick={emailChecked ? handleChangePassword : handleContinue}
+              disabled={emailChecked ? !(passwordValid && otpValid) : !emailValid}
+              sx={{ width: '100%', mt: 2 }}
+            />
+          </div>
+        </form>
+      </Box>
     </Box>
   );
 };
