@@ -1,3 +1,4 @@
+import Loader from '../Loader/Loader.jsx';
 import { useState, useEffect } from 'react';
 import { TextField, IconButton, InputAdornment, Box } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
@@ -22,6 +23,7 @@ const ForgotPasswordForm = () => {
   const [passwordValid, setPasswordValid] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [otpValid, setOtpValid] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -38,7 +40,8 @@ const ForgotPasswordForm = () => {
 
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
-  const handleContinue = async () => {
+const handleContinue = async () => {
+  setLoading(true);
   try {
     const res = await axios.post('https://loginx4.onrender.com/api/auth/forgot-password', { email });
     const message = res.data?.message;
@@ -46,7 +49,7 @@ const ForgotPasswordForm = () => {
     if (message === 'OTP sent to registered email') {
       setEmailChecked(true);
       setErrorMsg('');
-      setShowSuccess(true); // show the popup
+      setShowSuccess(true);
     } else {
       setEmailChecked(false);
       setErrorMsg('User not found with that email.');
@@ -54,6 +57,8 @@ const ForgotPasswordForm = () => {
   } catch (error) {
     setErrorMsg('Something went wrong. Please try again.');
     setEmailChecked(false);
+  } finally {
+    setLoading(false);
   }
 };
 
@@ -109,109 +114,115 @@ const ForgotPasswordForm = () => {
   );
 
   return (
-    <Box sx={{ position: 'relative', minHeight: '100vh' }}>
-      {/* Background layer */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          backgroundColor: '#ffffff',
-          zIndex: -1,
-        }}
-      />
+  <Box sx={{ position: 'relative', minHeight: '100vh' }}>
+    {loading ? (
+      <Loader />
+    ) : (
+      <>
+        {/* Background layer */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: '#ffffff',
+            zIndex: -1,
+          }}
+        />
 
-      {/* Main content */}
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '100vh',
-          padding: 2,
-        }}
-      >
-        <form className={css.form} onSubmit={(e) => e.preventDefault()}>
-          <div className={css.logo_wrapper}>
-            <Logo />
-          </div>
-
-          <div className={css.container_field}>
-            <div className={css.container_input}>
-              <TextField
-                name="email"
-                type="email"
-                label="E-mail"
-                value={email}
-                placeholder="Enter your e-mail id"
-                onChange={(e) => setEmail(e.target.value)}
-                variant="outlined"
-                fullWidth
-                error={!!email && !emailValid}
-                helperText={!!email && !emailValid && "Please enter a valid email address"}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <EmailIcon sx={{ fill: 'lightgray' }} />
-                    </InputAdornment>
-                  ),
-                }}
-                sx={inputSx}
-              />
+        {/* Main content */}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '100vh',
+            padding: 2,
+          }}
+        >
+          <form className={css.form} onSubmit={(e) => e.preventDefault()}>
+            <div className={css.logo_wrapper}>
+              <Logo />
             </div>
 
-            {emailChecked && (
-              <>
-                <div className={css.container_input} style={{ marginTop: '20px' }}>
-                  <TextField
-                    label="OTP"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    variant="outlined"
-                    fullWidth
-                    error={!!otp && !otpValid}
-                    helperText={!!otp && !otpValid && "Must be a 4-digit number"}
-                    inputProps={{ maxLength: 4 }}
-                    sx={inputSx}
-                  />
-                </div>
-                {renderPasswordField('New Password', newPassword, setNewPassword)}
-                {renderPasswordField('Confirm Password', confirmPassword, setConfirmPassword)}
-              </>
+            <div className={css.container_field}>
+              <div className={css.container_input}>
+                <TextField
+                  name="email"
+                  type="email"
+                  label="E-mail"
+                  value={email}
+                  placeholder="Enter your e-mail id"
+                  onChange={(e) => setEmail(e.target.value)}
+                  variant="outlined"
+                  fullWidth
+                  error={!!email && !emailValid}
+                  helperText={!!email && !emailValid && "Please enter a valid email address"}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <EmailIcon sx={{ fill: 'lightgray' }} />
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={inputSx}
+                />
+              </div>
+
+              {emailChecked && (
+                <>
+                  <div className={css.container_input} style={{ marginTop: '20px' }}>
+                    <TextField
+                      label="OTP"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      variant="outlined"
+                      fullWidth
+                      error={!!otp && !otpValid}
+                      helperText={!!otp && !otpValid && "Must be a 4-digit number"}
+                      inputProps={{ maxLength: 4 }}
+                      sx={inputSx}
+                    />
+                  </div>
+                  {renderPasswordField('New Password', newPassword, setNewPassword)}
+                  {renderPasswordField('Confirm Password', confirmPassword, setConfirmPassword)}
+                </>
+              )}
+            </div>
+
+            {errorMsg && (
+              <p style={{ color: 'red', textAlign: 'center', margin: '10px 0' }}>{errorMsg}</p>
             )}
-          </div>
 
-          {errorMsg && (
-            <p style={{ color: 'red', textAlign: 'center', margin: '10px 0' }}>{errorMsg}</p>
-          )}
+            <div className={css.button_container} style={{ marginTop: '25px' }}>
+              <CustomButton
+                type="button"
+                color="primary"
+                content={emailChecked ? 'Change Password' : 'Continue'}
+                onClick={emailChecked ? handleChangePassword : handleContinue}
+                disabled={emailChecked ? !(passwordValid && otpValid) : !emailValid}
+                sx={{ width: '100%', mt: 2 }}
+              />
+            </div>
+          </form>
 
-          <div className={css.button_container} style={{ marginTop: '25px' }}>
-            <CustomButton
-              type="button"
-              color="primary"
-              content={emailChecked ? 'Change Password' : 'Continue'}
-              onClick={emailChecked ? handleChangePassword : handleContinue}
-              disabled={emailChecked ? !(passwordValid && otpValid) : !emailValid}
-              sx={{ width: '100%', mt: 2 }}
-            />
-          </div>
-        </form>
-        <Snackbar
-  open={showSuccess}
-  autoHideDuration={4000}
-  onClose={() => setShowSuccess(false)}
-  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
->
-  <Alert onClose={() => setShowSuccess(false)} severity="success" sx={{ width: '100%' }}>
-    OTP sent to your registered email!
-  </Alert>
-</Snackbar>
-      </Box>
-    </Box>
-  );
-};
+          <Snackbar
+            open={showSuccess}
+            autoHideDuration={4000}
+            onClose={() => setShowSuccess(false)}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          >
+            <Alert onClose={() => setShowSuccess(false)} severity="success" sx={{ width: '100%' }}>
+              OTP sent to your registered email!
+            </Alert>
+          </Snackbar>
+        </Box>
+      </>
+    )}
+  </Box>
+);
 
 const inputSx = {
   marginTop: '20px',
