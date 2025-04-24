@@ -145,6 +145,7 @@ const ForgotPasswordForm = () => {
                 type="email"
                 label="E-mail"
                 value={email}
+                placeholder="Enter your e-mail id"
                 onChange={(e) => setEmail(e.target.value)}
                 variant="outlined"
                 fullWidth
