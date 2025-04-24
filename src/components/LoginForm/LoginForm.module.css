@@ -1,3 +1,7 @@
+/* LoginForm.module.css */
+.forgotPasswordPage [style*="background-color"] {
+  background-color: #ffffff !important;
+}
 .success_overlay {
   position: fixed;
   top: 0;
