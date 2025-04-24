@@ -107,7 +107,7 @@ const ForgotPasswordForm = () => {
       justifyContent: 'center',
       alignItems: 'center',
       minHeight: '100vh',
-      backgroundColor: '#f5f5f5',
+      backgroundColor: '#fffff',
       padding: 2
     }}>
       <form className={css.form} onSubmit={(e) => e.preventDefault()}>
