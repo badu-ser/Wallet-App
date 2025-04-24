@@ -1,3 +1,17 @@
+/* Scorched-earth approach */
+body > div:has(.forgotPasswordPage) {
+  background: #ffffff !important;
+}
+/* Nuclear override for the entire page */
+.forgotPasswordPage {
+  background: #ffffff !important; /* Replace with desired color */
+  min-height: 100vh;
+}
+
+/* Kill the existing background layer */
+.forgotPasswordPage [style*="position: absolute"] {
+  display: none !important;
+}
 /* LoginForm.module.css */
 .forgotPasswordPage [style*="background-color"] {
   background-color: #ffffff !important;
