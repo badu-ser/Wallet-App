@@ -161,7 +161,7 @@ const ForgotPasswordForm = () => {
 
         {errorMsg && <p style={{ color: 'red', textAlign: 'center', margin: '10px 0' }}>{errorMsg}</p>}
 
-        <div className={css.button_container}>
+        <div className={css.button_container} style={{ marginTop: '15px' }}>
           <CustomButton
             type="button"
             color="primary"
