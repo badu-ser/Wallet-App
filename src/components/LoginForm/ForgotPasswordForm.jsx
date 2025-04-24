@@ -8,6 +8,7 @@ import Logo from '../Logo/Logo.jsx';
 import CustomButton from '../CustomButton/CustomButton.jsx';
 import css from './LoginForm.module.css';
 import axios from 'axios';
+import { Snackbar, Alert } from '@mui/material';
 
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState('');
@@ -19,6 +20,7 @@ const ForgotPasswordForm = () => {
   const [emailChecked, setEmailChecked] = useState(false);
   const [emailValid, setEmailValid] = useState(false);
   const [passwordValid, setPasswordValid] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [otpValid, setOtpValid] = useState(false);
 
   useEffect(() => {
@@ -37,16 +39,23 @@ const ForgotPasswordForm = () => {
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
   const handleContinue = async () => {
-    try {
-      const res = await axios.post('https://loginx4.onrender.com/api/auth/forgot-password', { email });
-      if (res.status === 200) {
-        setEmailChecked(true);
-        setErrorMsg('');
-      }
-    } catch (error) {
-      setErrorMsg(error.response?.data?.message || 'No user found with that email.');
+  try {
+    const res = await axios.post('https://loginx4.onrender.com/api/auth/forgot-password', { email });
+    const message = res.data?.message;
+
+    if (message === 'OTP sent to registered email') {
+      setEmailChecked(true);
+      setErrorMsg('');
+      setShowSuccess(true); // show the popup
+    } else {
+      setEmailChecked(false);
+      setErrorMsg('User not found with that email.');
     }
-  };
+  } catch (error) {
+    setErrorMsg('Something went wrong. Please try again.');
+    setEmailChecked(false);
+  }
+};
 
   const handleChangePassword = async () => {
     try {
@@ -188,6 +197,16 @@ const ForgotPasswordForm = () => {
             />
           </div>
         </form>
+        <Snackbar
+  open={showSuccess}
+  autoHideDuration={4000}
+  onClose={() => setShowSuccess(false)}
+  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+>
+  <Alert onClose={() => setShowSuccess(false)} severity="success" sx={{ width: '100%' }}>
+    OTP sent to your registered email!
+  </Alert>
+</Snackbar>
       </Box>
     </Box>
   );
