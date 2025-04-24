@@ -6,7 +6,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Logo from '../Logo/Logo.jsx';
 import CustomButton from '../CustomButton/CustomButton.jsx';
-import css from './LoginForm.module.css';
+import css from './ForgotForm.module.css';
 import axios from 'axios';
 import { Snackbar, Alert } from '@mui/material';
 
