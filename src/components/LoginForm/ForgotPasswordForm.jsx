@@ -109,6 +109,8 @@ const ForgotPasswordForm = () => {
   );
 
   return (
+    // In ForgotPasswordForm.jsx
+<Box sx={{ position: 'relative', minHeight: '100vh' }} className={css.forgotPasswordPage}>
     <Box sx={{ position: 'relative', minHeight: '100vh' }}>
       {/* Background layer */}
       <Box
@@ -209,6 +211,7 @@ const ForgotPasswordForm = () => {
 </Snackbar>
       </Box>
     </Box>
+  </Box>
   );
 };
 
