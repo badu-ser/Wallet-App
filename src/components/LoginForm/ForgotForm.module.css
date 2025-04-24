@@ -1,6 +1,14 @@
 body {
   background-color: #ffffff; /* Replace with your desired color */
 }
+
+.logo_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
 .form {
   width: 100%;
   height: 100%;
