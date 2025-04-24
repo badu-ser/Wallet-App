@@ -8,9 +8,11 @@ import Logo from '../Logo/Logo.jsx';
 import CustomButton from '../CustomButton/CustomButton.jsx';
 import css from './ForgotForm.module.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { Snackbar, Alert } from '@mui/material';
 
 const ForgotPasswordForm = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -22,6 +24,7 @@ const ForgotPasswordForm = () => {
   const [passwordValid, setPasswordValid] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [otpValid, setOtpValid] = useState(false);
+  
 
   useEffect(() => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -56,27 +59,24 @@ const ForgotPasswordForm = () => {
     setEmailChecked(false);
   }
 };
+const handleChangePassword = async () => {
+  try {
+    const res = await axios.post('https://loginx4.onrender.com/api/auth/reset-password', {
+      email,
+      otp,
+      newPassword,
+    });
 
-  const handleChangePassword = async () => {
-    try {
-      const res = await axios.post('https://loginx4.onrender.com/api/auth/reset-password', {
-        email,
-        otp,
-        newPassword,
-      });
-
-      if (res.status === 200) {
-        alert('Password changed successfully!');
-        setEmail('');
-        setOtp('');
-        setNewPassword('');
-        setConfirmPassword('');
-        setEmailChecked(false);
-      }
-    } catch (error) {
-      setErrorMsg(error.response?.data?.message || 'Something went wrong. Please try again.');
+    if (res.status === 200) {
+      setShowSuccess(true);
+      setTimeout(() => {
+        navigate('/login'); // change this path to your actual login route
+      }, 1500); // delay to show the success snackbar if needed
     }
-  };
+  } catch (error) {
+    setErrorMsg(error.response?.data?.message || 'Something went wrong. Please try again.');
+  }
+};
 
   const renderPasswordField = (label, value, setValue) => (
     <div className={css.container_input}>
