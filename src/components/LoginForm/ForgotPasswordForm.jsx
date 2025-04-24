@@ -109,21 +109,22 @@ const ForgotPasswordForm = () => {
   );
 
   return (
-    // In ForgotPasswordForm.jsx
-<Box sx={{ position: 'relative', minHeight: '100vh' }} className={css.forgotPasswordPage}>
-    <Box sx={{ position: 'relative', minHeight: '100vh' }}>
-      {/* Background layer */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          backgroundColor: '#ffffff',
-          zIndex: -1,
-        }}
-      />
+  // Modified JSX
+  <Box sx={{ minHeight: '100vh' }} className={css.forgotPasswordPage}>
+    {/* Main content (no nested background Box) */}
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        padding: 2,
+      }}
+    >
+      {/* Rest of your form remains unchanged */}
+    </Box>
+  </Box>
+);
 
       {/* Main content */}
       <Box
@@ -211,7 +212,6 @@ const ForgotPasswordForm = () => {
 </Snackbar>
       </Box>
     </Box>
-  </Box>
   );
 };
 
