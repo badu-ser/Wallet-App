@@ -24,6 +24,7 @@ const ForgotPasswordForm = () => {
   const [passwordValid, setPasswordValid] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [otpValid, setOtpValid] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   
 
   useEffect(() => {
@@ -49,7 +50,8 @@ const ForgotPasswordForm = () => {
     if (message === 'OTP sent to registered email') {
       setEmailChecked(true);
       setErrorMsg('');
-      setShowSuccess(true); // show the popup
+      setSuccessMessage('OTP sent to your registered email!');  // Add this line
+      setShowSuccess(true);
     } else {
       setEmailChecked(false);
       setErrorMsg('User not found with that email.');
@@ -68,10 +70,11 @@ const handleChangePassword = async () => {
     });
 
     if (res.status === 200) {
+      setSuccessMessage('Password changed successfully!');  // Add this line
       setShowSuccess(true);
       setTimeout(() => {
-        navigate('/login'); // change this path to your actual login route
-      }, 1500); // delay to show the success snackbar if needed
+        navigate('/login');
+      }, 1500);
     }
   } catch (error) {
     setErrorMsg(error.response?.data?.message || 'Something went wrong. Please try again.');
@@ -205,7 +208,7 @@ const handleChangePassword = async () => {
   anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
 >
   <Alert onClose={() => setShowSuccess(false)} severity="success" sx={{ width: '100%' }}>
-    OTP sent to your registered email!
+    {successMessage}  {/* Update this line */}
   </Alert>
 </Snackbar>
       </Box>
