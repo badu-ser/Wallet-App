@@ -8,7 +8,7 @@ import Logo from '../Logo/Logo.jsx';
 import CustomButton from '../CustomButton/CustomButton.jsx';
 import css from './LoginForm.module.css';
 import axios from 'axios';
-import { Snackbar, Alert } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState('');
@@ -20,8 +20,10 @@ const ForgotPasswordForm = () => {
   const [emailChecked, setEmailChecked] = useState(false);
   const [emailValid, setEmailValid] = useState(false);
   const [passwordValid, setPasswordValid] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
   const [otpValid, setOtpValid] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -39,23 +41,23 @@ const ForgotPasswordForm = () => {
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
   const handleContinue = async () => {
-  try {
-    const res = await axios.post('https://loginx4.onrender.com/api/auth/forgot-password', { email });
-    const message = res.data?.message;
+    try {
+      const res = await axios.post('https://loginx4.onrender.com/api/auth/forgot-password', { email });
+      const message = res.data?.message;
 
-    if (message === 'OTP sent to registered email') {
-      setEmailChecked(true);
-      setErrorMsg('');
-      setShowSuccess(true); // show the popup
-    } else {
+      if (message === 'OTP sent to registered email') {
+        setEmailChecked(true);
+        setErrorMsg('');
+        setShowSuccessPopup(true);
+      } else {
+        setEmailChecked(false);
+        setErrorMsg('User not found with that email.');
+      }
+    } catch (error) {
+      setErrorMsg('Something went wrong. Please try again.');
       setEmailChecked(false);
-      setErrorMsg('User not found with that email.');
     }
-  } catch (error) {
-    setErrorMsg('Something went wrong. Please try again.');
-    setEmailChecked(false);
-  }
-};
+  };
 
   const handleChangePassword = async () => {
     try {
@@ -66,12 +68,12 @@ const ForgotPasswordForm = () => {
       });
 
       if (res.status === 200) {
-        alert('Password changed successfully!');
         setEmail('');
         setOtp('');
         setNewPassword('');
         setConfirmPassword('');
         setEmailChecked(false);
+        setShowSuccessPopup(true);
       }
     } catch (error) {
       setErrorMsg(error.response?.data?.message || 'Something went wrong. Please try again.');
@@ -110,7 +112,6 @@ const ForgotPasswordForm = () => {
 
   return (
     <Box sx={{ position: 'relative', minHeight: '100vh' }}>
-      {/* Background layer */}
       <Box
         sx={{
           position: 'absolute',
@@ -123,7 +124,6 @@ const ForgotPasswordForm = () => {
         }}
       />
 
-      {/* Main content */}
       <Box
         sx={{
           display: 'flex',
@@ -197,16 +197,20 @@ const ForgotPasswordForm = () => {
             />
           </div>
         </form>
-        <Snackbar
-  open={showSuccess}
-  autoHideDuration={4000}
-  onClose={() => setShowSuccess(false)}
-  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
->
-  <Alert onClose={() => setShowSuccess(false)} severity="success" sx={{ width: '100%' }}>
-    OTP sent to your registered email!
-  </Alert>
-</Snackbar>
+
+        {showSuccessPopup && (
+          <div className={css.success_overlay}>
+            <div className={css.success_card}>
+              <h2>Password Updated</h2>
+              <p>You can now log in with your new password.</p>
+              <CustomButton
+                color="primary"
+                content="OK"
+                onClick={() => navigate('/login')}
+              />
+            </div>
+          </div>
+        )}
       </Box>
     </Box>
   );
