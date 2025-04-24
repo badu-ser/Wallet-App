@@ -1,66 +1,13 @@
-/* Scorched-earth approach */
-body > div:has(.forgotPasswordPage) {
-  background: #ffffff !important;
-}
-/* Nuclear override for the entire page */
-.forgotPasswordPage {
-  background: #ffffff !important; /* Replace with desired color */
-  min-height: 100vh;
-}
 
-/* Kill the existing background layer */
-.forgotPasswordPage [style*="position: absolute"] {
-  display: none !important;
-}
-/* LoginForm.module.css */
-.forgotPasswordPage [style*="background-color"] {
-  background-color: #ffffff !important;
-}
-.success_overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
+.form {
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.success_card {
-  background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-}
-
-.success_card h2 {
-  margin-bottom: 10px;
-  font-size: 1.6rem;
-}
-
-.success_card p {
-  margin-bottom: 20px;
-  font-size: 1rem;
-  color: #555;
-}
-.form {
-  width: 100vw;
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #ffffff;
   box-shadow: 0px 10px 60px rgba(170, 178, 197, 0.2);
-  padding: 20px; /* Optional, for spacing inside form */
-  border-radius: 0; /* Remove rounding for full screen look */
-}
 
   @media screen and (min-width: 768px) {
     width: 500px;
@@ -72,6 +19,7 @@ body > div:has(.forgotPasswordPage) {
 
 .container_input {
   position: relative;
+  background-color: #ffffff;
 }
 
 .button_container {
@@ -82,6 +30,7 @@ body > div:has(.forgotPasswordPage) {
   margin: 0px;
   padding: 0px;
   gap: 20px;
+  background-color: #ffffff;
 }
 
 .button {
